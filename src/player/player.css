@@ -91,3 +91,26 @@ video {
     color: white;
     display: inline-block;
 }
+
+.volume {
+    display: inline-block;
+}
+
+.volume .volume_bar {
+    display: inline-block;
+    cursor: pointer;
+
+    height: 20px;
+    width: 5px;
+
+    background-image: url("./assets/volume_empty.png");
+    margin-right: 4px;
+}
+
+.volume .volume_bar:last-child {
+    margin-right: 0;
+}
+
+.volume .volume_bar.filled {
+    background-image: url("./assets/volume_filled.png");
+}
