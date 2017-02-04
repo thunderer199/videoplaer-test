@@ -14,6 +14,7 @@ export default class Player {
             timeText: node.querySelector('.time'),
             volume_container: node.querySelector('.volume'),
             volume_bars: node.querySelectorAll('.volume_bar'),
+            fullscreen: node.querySelector('.fullscreen'),
         };
 
         this.linkEvents();
@@ -32,6 +33,7 @@ export default class Player {
         components.playback.addEventListener('click', this.setupPlaybackTime.bind(this));
         components.volume_bars.forEach((bar) => bar.addEventListener('click', this.volumeBarListener.bind(this)));
 
+        components.fullscreen.addEventListener('click', this.openInFullScreen.bind(this))
     }
 
     playPauseListener() {
@@ -114,6 +116,19 @@ export default class Player {
             }
 
             filled = filled ^ (bar === currentBar); // current bar set filled to false state
+        }
+    }
+
+    openInFullScreen() {
+        const fullScreenFunctions = [
+            'requestFullscreen', 'mozRequestFullScreen', 'webkitRequestFullscreen', 'msRequestFullscreen'
+        ];
+
+        const player = this.domComponents.player;
+        for (const fnc of fullScreenFunctions) {
+            if (fnc in player) {
+                player[fnc].call(player);
+            }
         }
     }
 

@@ -11,6 +11,7 @@ video {
 .controls {
     position: absolute;
     cursor: default;
+    user-select: none;
 
     bottom: 0;
     left: 0;
@@ -94,6 +95,7 @@ video {
 
 .volume {
     display: inline-block;
+    margin-right: 20px;
 }
 
 .volume .volume_bar {
@@ -113,4 +115,17 @@ video {
 
 .volume .volume_bar.filled {
     background-image: url("./assets/volume_filled.png");
+}
+
+.fullscreen {
+    cursor: pointer;
+    display: inline-block;
+    height: 22px;
+    width: 35px;
+
+    background-image: url("./assets/fullscreen.png");
+}
+
+.fullscreen:hover {
+    background-image: url("./assets/fullscreen_hover.png");
 }
