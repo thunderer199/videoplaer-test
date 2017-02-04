@@ -11,7 +11,7 @@ export default class Player {
             player: node.querySelector('video'),
             playPause: node.querySelector('.play_pause'),
             playback_viewed: node.querySelector('.playback .filled'),
-            playback: node.querySelector('.playback'),
+            playback: node.querySelector('.playback-click_area'),
             timeContainer: node.querySelector('.time-block'),
             timeText: node.querySelector('.time'),
             volume_container: node.querySelector('.volume'),
