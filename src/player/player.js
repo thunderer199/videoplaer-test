@@ -28,6 +28,7 @@ export default class Player {
         clickBind(components.playPause, this.playPauseListener.bind(this));
 
         components.player.addEventListener('timeupdate', this.timeUpdateListener.bind(this));
+        components.player.addEventListener('volumechange', this.volumeChangedListener.bind(this));
 
         addListeners(components.playback, ['mousemove', 'mouseenter', 'touchmove'], this.showAndUpdateTimeMark.bind(this));
         addListeners(components.playback, ['mouseleave', 'touchend'], this.hideTimeMark.bind(this));
@@ -118,21 +119,36 @@ export default class Player {
 
     volumeBarListener(evt) {
         const currentBar = evt.currentTarget;
-        this.domComponents.player.volume = currentBar.getAttribute('data-level') / 100;
-        if (this.domComponents.player.muted) {
-            this.domComponents.player.muted = false;
+        const volume = currentBar.getAttribute('data-level') / 100;
+        this.setVolumeLevel(volume);
+    }
+
+    setVolumeLevel(volume, unmute) {
+        if (unmute === void 0) {
+            unmute = true;
+        }
+        const player = this.domComponents.player;
+        player.volume = volume;
+        if (player.muted && unmute) {
+            player.muted = false;
+        } else if (player.muted && !unmute) {
+            volume = 0;
         }
 
-        let filled = true;
         for (const bar of this.domComponents.volume_bars) {
-            if (filled) {
+            const barVolume = bar.getAttribute('data-level') / 100;
+            if (barVolume <= volume) {
                 bar.classList.add('filled');
             } else {
                 bar.classList.remove('filled');
             }
-
-            filled = filled ^ (bar === currentBar); // current bar set filled to false state
         }
+    }
+
+    volumeChangedListener() {
+        const player = this.domComponents.player;
+
+        this.setVolumeLevel(player.volume, false);
     }
 
     openInFullScreen() {
