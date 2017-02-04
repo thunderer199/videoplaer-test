@@ -35,18 +35,18 @@ video {
 
 
 .paused {
-    background-image: url("./../../assets/play.png");
+    background-image: url("/assets/play.png");
 }
 
 .paused:hover {
-    background-image: url("./../../assets/play_hover.png");
+    background-image: url("/assets/play_hover.png");
 }
 .played {
-    background-image: url("./../../assets/pause.png");
+    background-image: url("/assets/pause.png");
 }
 
 .played:hover {
-    background-image: url("./../../assets/pause_hover.png");
+    background-image: url("/assets/pause_hover.png");
 }
 
 
@@ -71,4 +71,23 @@ video {
     will-change: transform;
 
     background-color: #f15d50;
+}
+
+.time-block {
+    background-image: url("/assets/time_box.png");
+    position: absolute;
+    width: 58px;
+    height: 36px;
+    z-index: 11;
+
+    top: -38px;
+    left: -29px;
+
+    visibility: hidden;
+    will-change: transform;
+}
+
+.time-block .text {
+    color: white;
+    display: inline-block;
 }

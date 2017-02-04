@@ -10,15 +10,25 @@ export default class Player {
             playPause: node.querySelector('.play_pause'),
             playback_viewed: node.querySelector('.playback .filled'),
             playback: node.querySelector('.playback'),
+            timeContainer: node.querySelector('.time-block'),
+            timeText: node.querySelector('.time'),
         };
 
         this.linkEvents();
     }
 
     linkEvents() {
-        this.domComponents.playPause.addEventListener('click', this.playPauseListener.bind(this));
+        const components = this.domComponents;
 
-        this.domComponents.player.addEventListener('timeupdate', this.timeUpdateListener.bind(this))
+        components.playPause.addEventListener('click', this.playPauseListener.bind(this));
+
+        components.player.addEventListener('timeupdate', this.timeUpdateListener.bind(this));
+
+        components.playback.addEventListener('mousemove', this.showAndUpdateTimeMark.bind(this));
+        components.playback.addEventListener('mouseenter', this.showAndUpdateTimeMark.bind(this));
+        components.playback.addEventListener('mouseleave', () => components.timeContainer.style.visibility = 'hidden');
+        components.playback.addEventListener('click', this.setupPlaybackTime.bind(this));
+
     }
 
     playPauseListener() {
@@ -38,6 +48,56 @@ export default class Player {
             this.pause();
         }
     }
+
+    /**
+     *
+     * @param {Event} event with coordinates
+     */
+    showAndUpdateTimeMark({pageX}) {
+        const player = this.domComponents.player;
+        this.domComponents.timeContainer.style.visibility = 'visible';
+
+        const rect = this.domComponents.playback.getBoundingClientRect();
+        const offsetLeft = pageX - rect.left;
+        const playbackPerc = (offsetLeft) / rect.width * 100;
+
+        this.domComponents.timeContainer.style.transform = `translateX(${offsetLeft}px)`;
+
+
+        const secondsInPerc = 100 / player.duration;
+        const time = playbackPerc / secondsInPerc;
+        this.domComponents.timeText.innerHTML = Player.formatTime(time);
+    }
+
+
+    /**
+     *
+     * @param {number} time Time in seconds
+     * @return {string} Formatted string in hours minutes seconds format
+     */
+    static formatTime(time) {
+        let format = (time % 60).toFixed() + 's';
+
+        if (time < 60 && time > 60) {
+            format = (time / 60).toFixed() + 'm ' + format;
+        }
+        if (time < 3600 && time > 3600) {
+            format = (time / 3600).toFixed() + 'h ' + format;
+        }
+
+        return format;
+    }
+
+    setupPlaybackTime({pageX}) {
+        const player = this.domComponents.player;
+
+        const {left,  width} = this.domComponents.playback.getBoundingClientRect();
+        const playbackInPercent = (pageX - left) / width * 100;
+        const timeInOnePercent = 100 / player.duration;
+
+        player.currentTime = playbackInPercent / timeInOnePercent;
+    }
+
 
     play() {
         this.paused = false;
