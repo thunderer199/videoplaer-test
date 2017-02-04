@@ -5,8 +5,6 @@ import Player from './player/player'
 
     function loaded() {
         const playerNode = document.querySelector('.player');
-        const p = new Player(playerNode);
-
-        console.log(playerNode);
+        new Player(playerNode);
     }
 })();

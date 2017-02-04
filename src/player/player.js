@@ -1,9 +1,11 @@
+import {clickBind, addListeners} from '../system'
+
 import './player.css'
 
 export default class Player {
 
     constructor(node) {
-        this.paused = false;
+        this.paused = true;
         this.playerNode = node;
         this.domComponents = {
             player: node.querySelector('video'),
@@ -23,17 +25,16 @@ export default class Player {
     linkEvents() {
         const components = this.domComponents;
 
-        components.playPause.addEventListener('click', this.playPauseListener.bind(this));
+        clickBind(components.playPause, this.playPauseListener.bind(this));
 
         components.player.addEventListener('timeupdate', this.timeUpdateListener.bind(this));
 
-        components.playback.addEventListener('mousemove', this.showAndUpdateTimeMark.bind(this));
-        components.playback.addEventListener('mouseenter', this.showAndUpdateTimeMark.bind(this));
-        components.playback.addEventListener('mouseleave', () => components.timeContainer.style.visibility = 'hidden');
-        components.playback.addEventListener('click', this.setupPlaybackTime.bind(this));
-        components.volume_bars.forEach((bar) => bar.addEventListener('click', this.volumeBarListener.bind(this)));
+        addListeners(components.playback, ['mousemove', 'mouseenter', 'touchmove'], this.showAndUpdateTimeMark.bind(this));
+        addListeners(components.playback, ['mouseend', 'touchend'], () => components.timeContainer.style.visibility = 'hidden');
+        clickBind(components.playback, this.setupPlaybackTime.bind(this));
+        components.volume_bars.forEach((bar) => clickBind(bar, this.volumeBarListener.bind(this)));
 
-        components.fullscreen.addEventListener('click', this.openInFullScreen.bind(this))
+        clickBind(components.fullscreen, this.openInFullScreen.bind(this))
     }
 
     playPauseListener() {
@@ -58,7 +59,8 @@ export default class Player {
      *
      * @param {Event} event with coordinates
      */
-    showAndUpdateTimeMark({pageX}) {
+    showAndUpdateTimeMark(event) {
+        const pageX = event.pageX || event.changedTouches[0].pageX;
         const player = this.domComponents.player;
         this.domComponents.timeContainer.style.visibility = 'visible';
 
@@ -93,7 +95,9 @@ export default class Player {
         return format;
     }
 
-    setupPlaybackTime({pageX}) {
+    setupPlaybackTime(event) {
+        const pageX = event.pageX || event.changedTouches[0].pageX;
+
         const player = this.domComponents.player;
 
         const {left, width} = this.domComponents.playback.getBoundingClientRect();

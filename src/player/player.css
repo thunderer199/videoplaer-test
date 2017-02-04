@@ -1,4 +1,7 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans');
+
 .player {
+    font-family: 'Open Sans', sans-serif;
     position: relative;
     width: 100%;
 }
@@ -6,7 +9,6 @@
 video {
     width: 100%;
 }
-
 
 .controls {
     position: absolute;
@@ -34,7 +36,6 @@ video {
     margin-right: 25px;
 }
 
-
 .paused {
     background-image: url("./assets/play.png");
 }
@@ -42,6 +43,7 @@ video {
 .paused:hover {
     background-image: url("./assets/play_hover.png");
 }
+
 .played {
     background-image: url("./assets/pause.png");
 }
@@ -50,14 +52,13 @@ video {
     background-image: url("./assets/pause_hover.png");
 }
 
-
 .playback {
     cursor: pointer;
 
     display: inline-block;
     position: relative;
     left: 0;
-    width: calc(100% - 72px - 125px);
+    width: calc(100% - 73px - 125px);
     height: 3px;
     margin: 8px 30px 7px 0;
     background-color: #fff;
@@ -88,9 +89,15 @@ video {
     will-change: transform;
 }
 
-.time-block .text {
+.time-block .time {
     color: white;
     display: inline-block;
+    text-align: center;
+    vertical-align: baseline;
+    width: 100%;
+    height: 100%;
+
+    font-size: 0.7em;
 }
 
 .volume {
