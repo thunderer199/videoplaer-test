@@ -30,7 +30,7 @@ export default class Player {
         components.player.addEventListener('timeupdate', this.timeUpdateListener.bind(this));
 
         addListeners(components.playback, ['mousemove', 'mouseenter', 'touchmove'], this.showAndUpdateTimeMark.bind(this));
-        addListeners(components.playback, ['mouseend', 'touchend'], () => components.timeContainer.style.visibility = 'hidden');
+        addListeners(components.playback, ['mouseend', 'touchend'], this.hideTimeMark.bind(this));
         clickBind(components.playback, this.setupPlaybackTime.bind(this));
         components.volume_bars.forEach((bar) => clickBind(bar, this.volumeBarListener.bind(this)));
 
@@ -73,9 +73,16 @@ export default class Player {
 
         const secondsInPerc = 100 / player.duration;
         const time = playbackPerc / secondsInPerc;
-        this.domComponents.timeText.innerHTML = Player.formatTime(time);
+        if (playbackPerc > 0 && playbackPerc <= 100) {
+            this.domComponents.timeText.innerHTML = Player.formatTime(time);
+        } else {
+            this.hideTimeMark();
+        }
     }
 
+    hideTimeMark() {
+        this.domComponents.timeContainer.style.visibility = 'hidden';
+    }
 
     /**
      *
@@ -83,13 +90,15 @@ export default class Player {
      * @return {string} Formatted string in hours minutes seconds format
      */
     static formatTime(time) {
-        let format = (time % 60).toFixed() + 's';
+        time = +time.toFixed();
 
-        if (time < 60 && time > 60) {
-            format = (time / 60).toFixed() + 'm ' + format;
+        let format = `${time % 60}s`;
+
+        if (time >= 60) {
+            format = `${(time / 60).toFixed()}m ${format}`;
         }
-        if (time < 3600 && time > 3600) {
-            format = (time / 3600).toFixed() + 'h ' + format;
+        if (time >= 3600) {
+            format = `${(time / 3600).toFixed()}h ${format}`;
         }
 
         return format;
