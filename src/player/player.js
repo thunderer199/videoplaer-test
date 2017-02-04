@@ -14,13 +14,15 @@ export default class Player {
     }
 
     linkEvents() {
-        this.domComponents.playPause.addEventListener('click', () => {
-            if (this.paused) {
-                this.play();
-            } else {
-                this.pause();
-            }
-        });
+        this.domComponents.playPause.addEventListener('click', this.playPauseListener.bind(this));
+    }
+
+    playPauseListener() {
+        if (this.paused) {
+            this.play();
+        } else {
+            this.pause();
+        }
     }
 
     play() {
