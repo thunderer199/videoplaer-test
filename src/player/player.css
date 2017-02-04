@@ -48,3 +48,27 @@ video {
 .played:hover {
     background-image: url("./../../assets/pause_hover.png");
 }
+
+
+.playback {
+    cursor: pointer;
+
+    display: inline-block;
+    position: relative;
+    left: 0;
+    width: calc(100% - 72px - 125px);
+    height: 3px;
+    margin: 8px 30px 7px 0;
+    background-color: #fff;
+}
+
+.playback .filled {
+    width: 0;
+    height: 100%;
+    position: absolute;
+    transform-origin: 0;
+
+    will-change: transform;
+
+    background-color: #f15d50;
+}

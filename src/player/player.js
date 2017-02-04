@@ -8,6 +8,8 @@ export default class Player {
         this.domComponents = {
             player: node.querySelector('video'),
             playPause: node.querySelector('.play_pause'),
+            playback_viewed: node.querySelector('.playback .filled'),
+            playback: node.querySelector('.playback'),
         };
 
         this.linkEvents();
@@ -15,12 +17,24 @@ export default class Player {
 
     linkEvents() {
         this.domComponents.playPause.addEventListener('click', this.playPauseListener.bind(this));
+
+        this.domComponents.player.addEventListener('timeupdate', this.timeUpdateListener.bind(this))
     }
 
     playPauseListener() {
         if (this.paused) {
             this.play();
         } else {
+            this.pause();
+        }
+    }
+
+    timeUpdateListener() {
+        const player = this.domComponents.player;
+        let viewedPercent = player.currentTime / player.duration * 100;
+        this.domComponents.playback_viewed.style.width = `${viewedPercent}%`;
+
+        if (player.ended) {
             this.pause();
         }
     }
