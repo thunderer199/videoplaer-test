@@ -35,18 +35,18 @@ video {
 
 
 .paused {
-    background-image: url("/assets/play.png");
+    background-image: url("./assets/play.png");
 }
 
 .paused:hover {
-    background-image: url("/assets/play_hover.png");
+    background-image: url("./assets/play_hover.png");
 }
 .played {
-    background-image: url("/assets/pause.png");
+    background-image: url("./assets/pause.png");
 }
 
 .played:hover {
-    background-image: url("/assets/pause_hover.png");
+    background-image: url("./assets/pause_hover.png");
 }
 
 
@@ -74,7 +74,7 @@ video {
 }
 
 .time-block {
-    background-image: url("/assets/time_box.png");
+    background-image: url("./assets/time_box.png");
     position: absolute;
     width: 58px;
     height: 36px;
