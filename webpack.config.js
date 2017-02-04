@@ -4,7 +4,7 @@ const path = require('path');
 module.exports = {
     context: path.resolve(__dirname, './src'),
     entry: {
-        app: './main.js',
+        app: ['webpack-dev-server/client', './main.js'],
     },
     output: {
         filename: '[name].bundle.js',
