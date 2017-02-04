@@ -1,10 +1,35 @@
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const path = require('path');
 
+const PROD = JSON.parse(process.env.PROD_ENV || '0');
+
+const PROD_PLUGINS = () => {
+    const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
+    const CompressionPlugin = require("compression-webpack-plugin");
+    return [
+        new UglifyJSPlugin({
+            compress: {
+                hoist_vars: true,
+                unsafe: true
+            }
+        }),
+        new CompressionPlugin({
+            asset: "[path].gz[query]",
+            algorithm: "gzip",
+            test: /\.js$/,
+            threshold: 1024,
+            minRatio: 0.8
+        })
+    ];
+};
+
+
+const DEV_ENTRIES = ['webpack-dev-server/client'];
+
 module.exports = {
     context: path.resolve(__dirname, './src'),
     entry: {
-        app: ['webpack-dev-server/client', './main.js'],
+        app: (PROD ? [] : DEV_ENTRIES).concat(['./main.js']),
     },
     output: {
         filename: '[name].bundle.js',
@@ -82,5 +107,5 @@ module.exports = {
     },
     plugins: [
         new ExtractTextPlugin({filename: 'bundle.css', disable: false, allChunks: true})
-    ]
+    ].concat(PROD ? PROD_PLUGINS() : [])
 };
