@@ -30,7 +30,7 @@ export default class Player {
         components.player.addEventListener('timeupdate', this.timeUpdateListener.bind(this));
 
         addListeners(components.playback, ['mousemove', 'mouseenter', 'touchmove'], this.showAndUpdateTimeMark.bind(this));
-        addListeners(components.playback, ['mouseend', 'touchend'], this.hideTimeMark.bind(this));
+        addListeners(components.playback, ['mouseleave', 'touchend'], this.hideTimeMark.bind(this));
         clickBind(components.playback, this.setupPlaybackTime.bind(this));
         components.volume_bars.forEach((bar) => clickBind(bar, this.volumeBarListener.bind(this)));
 
@@ -119,6 +119,9 @@ export default class Player {
     volumeBarListener(evt) {
         const currentBar = evt.currentTarget;
         this.domComponents.player.volume = currentBar.getAttribute('data-level') / 100;
+        if (this.domComponents.player.muted) {
+            this.domComponents.player.muted = false;
+        }
 
         let filled = true;
         for (const bar of this.domComponents.volume_bars) {
