@@ -11,6 +11,7 @@ module.exports = {
         path: path.resolve(__dirname, './dist')
     },
     devServer: {
+        host: '0.0.0.0',
         contentBase: path.resolve(__dirname, './'),
     },
     module: {
@@ -36,6 +37,18 @@ module.exports = {
                         sourceMap: true
                     }
                 })
+            },
+            {
+                test: /\.css$/,
+                exclude: /node_modules/,
+                use: {
+                    loader: 'postcss-loader',
+                    options: {
+                        plugins: function () {
+                            return [require('autoprefixer')];
+                        }
+                    }
+                }
             },
             {
                 test: /\.(jpe?g|png)$/,
