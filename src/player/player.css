@@ -7,10 +7,12 @@
 }
 
 video {
+    z-index: -2;
     width: 100%;
 }
 
 .controls {
+    z-index: 1;
     position: absolute;
     cursor: default;
     user-select: none;
@@ -144,4 +146,22 @@ video {
 
 .fullscreen:hover {
     background-image: url("./assets/fullscreen_hover.png");
+}
+
+.canvas_wrapper {
+    z-index: -1;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+}
+
+.canvas_wrapper canvas {
+    width: 100%;
+    height: 100%;
+
+    position: absolute;
+    left: 0;
+    top: 0;
 }

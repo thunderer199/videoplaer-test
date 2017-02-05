@@ -9,6 +9,7 @@ export default class Player {
         this.playerNode = node;
         this.domComponents = {
             player: node.querySelector('video'),
+            canvas: node.querySelector('.canvas_wrapper canvas'),
             playPause: node.querySelector('.play_pause'),
             playback_viewed: node.querySelector('.playback .filled'),
             playback: node.querySelector('.playback-click_area'),
@@ -25,6 +26,8 @@ export default class Player {
     linkEvents() {
         const components = this.domComponents;
 
+        addListeners(components.player, ['loadeddata', 'seeked'], this.generatePreview.bind(this));
+
         clickBind(components.playPause, this.playPauseListener.bind(this));
 
         components.player.addEventListener('timeupdate', this.timeUpdateListener.bind(this));
@@ -35,7 +38,7 @@ export default class Player {
         clickBind(components.playback, this.setupPlaybackTime.bind(this));
         [].forEach.call(components.volume_bars, (bar) => clickBind(bar, this.volumeBarListener.bind(this)));
 
-        clickBind(components.fullscreen, this.openInFullScreen.bind(this))
+        clickBind(components.fullscreen, this.openInFullScreen.bind(this));
     }
 
     playPauseListener() {
@@ -174,6 +177,8 @@ export default class Player {
         this.domComponents.playPause.classList.remove('paused');
 
         this.domComponents.player.play();
+
+        this.lastFrame = requestAnimationFrame(this.generatePreview.bind(this))
     }
 
     pause() {
@@ -183,5 +188,27 @@ export default class Player {
         this.domComponents.playPause.classList.remove('played');
 
         this.domComponents.player.pause();
+
+        cancelAnimationFrame(this.lastFrame);
+    }
+
+    generatePreview() {
+        const canvas = this.domComponents.canvas;
+        const player = this.domComponents.player;
+
+        const context = canvas.getContext('2d');
+        context.filter = 'blur(2px)';
+        // const {width} = canvas.getBoundingClientRect();
+        const {width, height} = canvas;
+        // canvas.width = width;
+        // canvas.height = height;
+        const playerSize = player.getBoundingClientRect();
+        // context.drawImage(player, 0, 0, width, height);
+        context.drawImage(player, 0, -(playerSize.height + 50), width, playerSize.height + height + 30);
+        // context.fillRect(0, playerSize.height, width, height);
+
+        if (!player.paused) {
+            this.lastFrame = requestAnimationFrame(this.generatePreview.bind(this))
+        }
     }
 }
