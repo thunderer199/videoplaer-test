@@ -4,7 +4,7 @@
   "description": "",
   "main": " ",
   "scripts": {
-    "build": "webpack -p",
+    "build": "webpack -p && cp ./index.html ./dist/index.html",
     "start": "webpack-dev-server",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
