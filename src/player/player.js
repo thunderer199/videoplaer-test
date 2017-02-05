@@ -33,7 +33,7 @@ export default class Player {
         addListeners(components.playback, ['mousemove', 'mouseenter', 'touchmove'], this.showAndUpdateTimeMark.bind(this));
         addListeners(components.playback, ['mouseleave', 'touchend'], this.hideTimeMark.bind(this));
         clickBind(components.playback, this.setupPlaybackTime.bind(this));
-        components.volume_bars.forEach((bar) => clickBind(bar, this.volumeBarListener.bind(this)));
+        [].forEach.call(components.volume_bars, (bar) => clickBind(bar, this.volumeBarListener.bind(this)));
 
         clickBind(components.fullscreen, this.openInFullScreen.bind(this))
     }
@@ -135,7 +135,8 @@ export default class Player {
             volume = 0;
         }
 
-        for (const bar of this.domComponents.volume_bars) {
+        for (let i = 0; i < this.domComponents.volume_bars.length; i++) {
+            const bar = this.domComponents.volume_bars[i]
             const barVolume = bar.getAttribute('data-level') / 100;
             if (barVolume <= volume) {
                 bar.classList.add('filled');
@@ -157,7 +158,8 @@ export default class Player {
         ];
 
         const player = this.domComponents.player;
-        for (const fnc of fullScreenFunctions) {
+        for (let i = 0; i < fullScreenFunctions.length; i++) {
+            const fnc = fullScreenFunctions[i];
             if (fnc in player) {
                 player[fnc].call(player);
             }
